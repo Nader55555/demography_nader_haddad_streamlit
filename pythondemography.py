@@ -131,8 +131,7 @@ st.plotly_chart(fig, use_container_width=True)
 #     unsafe_allow_html=True
 # )
 st.markdown(
-    "<div class='note'>
-    The sunburst chart shows the dominant family size composition by region in Lebanon. "
+    "<div class='note'>The sunburst chart shows the dominant family size composition by region in Lebanon. "
     "It highlights the variations in family sizes across different regions.  \n\n"
     "**Insights:**  \n"
     "• **Dominant Family Size:** Across most regions in Lebanon, medium-sized families (4–6 members) are the most common household composition. "
@@ -195,6 +194,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
