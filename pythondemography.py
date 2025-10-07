@@ -131,14 +131,16 @@ st.plotly_chart(fig, use_container_width=True)
 #     unsafe_allow_html=True
 # )
 st.markdown(
-    "The sunburst chart shows the dominant family size composition by region in Lebanon. "
+    "<div class='note'>
+    The sunburst chart shows the dominant family size composition by region in Lebanon. "
     "It highlights the variations in family sizes across different regions.  \n\n"
     "**Insights:**  \n"
     "• **Dominant Family Size:** Across most regions in Lebanon, medium-sized families (4–6 members) are the most common household composition. "
     "This indicates a general cultural or economic trend favoring moderate family units, balancing between large traditional families and smaller modern ones.  \n"
     "• **Regional Differences:** North and South Governorates show the highest concentration of 4–6 member families, suggesting stable middle-sized households. "
     "Some regions show minor proportions of larger families (7+), possibly reflecting rural or traditional communities. "
-    "Urban areas (like Beirut or Mount Lebanon) have more 1–3 member families, aligning with higher living costs and more single or small-family households."
+    "Urban areas (like Beirut or Mount Lebanon) have more 1–3 member families, aligning with higher living costs and more single or small-family households.</div>",
+    unsafe_allow_html=True
 )
 
 
@@ -193,5 +195,6 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
