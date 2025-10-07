@@ -177,7 +177,7 @@ st.markdown(
     <div class='note'>
     The box plot shows the percentage of youth (15–24 years old) in different regions of Lebanon.
     It helps compare which regions have more young people and how spread out their numbers are. <br><br>
-    <b>Insights:</b><br>
+    Insights:<br>
     • <b>Tripoli</b> and <b>Baalbek-Hermel</b> have some of the highest youth percentages, showing that these areas have a larger young population compared to others. <br>
     • Regions like <b>Mount Lebanon</b> and <b>Beirut</b> have more mixed values, meaning some parts have many young people while others have fewer.
     </div>
@@ -209,6 +209,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
