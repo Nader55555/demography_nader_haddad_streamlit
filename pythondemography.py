@@ -114,13 +114,51 @@ df["Dominant size"] = df[[F13, F46, F7p]].idxmax(axis=1).map(
     {F13:"1–3", F46:"4–6", F7p:"7+"}
 )
 
-# Family-size composition / Region sunburst
-fig = px.sunburst(df, path=["Region", "Dominant size"],
-                  title="Family Size Composition by Region",
-                  color="Dominant size",
-                  color_discrete_map={"1–3":"lightblue", "4–6":"orange", "7+":"red"},
-                  labels={"Dominant size":"Dominant Family Size"})
+# --- New INTERACTIVE SUNBURST FOR (Region, Dominant size) ---
+
+# Controls
+all_regions = sorted(df["Region"].dropna().unique().tolist())
+all_sizes   = sorted(df["Dominant size"].dropna().unique().tolist())
+
+sel_regions = st.multiselect("Filter regions", all_regions, default=all_regions)
+sel_sizes   = st.multiselect("Show family sizes", all_sizes, default=all_sizes)
+
+# We'll aggregate counts so the slider works even if your raw df has no 'Count' column
+f = df[df["Region"].isin(sel_regions) & df["Dominant size"].isin(sel_sizes)]
+agg = (
+    f.groupby(["Region", "Dominant size"])
+     .size()
+     .reset_index(name="n")
+)
+
+min_n = st.slider("Minimum records per slice", 0, int(agg["n"].max() if len(agg) else 0), 0)
+
+agg = agg[agg["n"] >= min_n]
+
+# Sunburst
+fig = px.sunburst(
+    agg,
+    path=["Region", "Dominant size"],
+    values="n",
+    color="Dominant size",
+    title="Family Size Composition by Region",
+    color_discrete_map={"1-3": "lightblue", "4-6": "orange", "7+": "red"},
+    labels={"Dominant size": "Dominant Family Size", "n": "Records"},
+)
+
+fig.update_traces(hovertemplate="<b>%{label}</b><br>Records: %{value:,}<extra></extra>")
+fig.update_layout(margin=dict(t=10, r=10, b=10, l=10))
+
 st.plotly_chart(fig, use_container_width=True)
+
+##OLD PIE CHARM
+# # Family-size composition / Region sunburst
+# fig = px.sunburst(df, path=["Region", "Dominant size"],
+#                   title="Family Size Composition by Region",
+#                   color="Dominant size",
+#                   color_discrete_map={"1–3":"lightblue", "4–6":"orange", "7+":"red"},
+#                   labels={"Dominant size":"Dominant Family Size"})
+# st.plotly_chart(fig, use_container_width=True)
 
 # st.write("The sunburst chart shows the dominant family size composition by region in Lebanon. It highlights the variations in family sizes across different regions.")
 
@@ -209,6 +247,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
