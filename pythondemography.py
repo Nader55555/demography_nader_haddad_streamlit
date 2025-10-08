@@ -153,7 +153,7 @@ selected_regions = st.multiselect(
 st.markdown("<div class='label-box'>Family Size View</div>", unsafe_allow_html=True)
 size_choice = st.radio(
     "",
-    ["ALL", "1-3", "4-6", "7+"],
+    ["All", "1-3", "4-6", "7+"],
     index=0,
     horizontal=True
 )
@@ -182,6 +182,7 @@ else:
         labels={"Dominant size": "Dominant Family Size"}
     )
     st.plotly_chart(fig, use_container_width=True)
+
 
 ##OLD PIE CHARM
 # # Family-size composition / Region sunburst
@@ -343,6 +344,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
