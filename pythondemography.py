@@ -404,30 +404,6 @@ st.markdown(
 
 thick_divider()
 
-#add a box plot + points for the percentage of elderly vs region with plotly express
-E65 = "Percentage of Eldelry - 65 or more years"
-fig = px.box(
-    df,
-    x="Region",
-    y=E65,
-    points="all",                 # show all towns as points
-    hover_name="Town",            # big title on hover
-    hover_data={                  # extra fields on hover
-        "Region": True,
-        E65: ':.1f',              # format number
-    }
-)
-st.plotly_chart(fig, use_container_width=True)
-
-st.markdown(
-    "<div class='note'>The box plot illustrates the distribution of the "
-    "percentage of elderly (65 or more years) across different regions in Lebanon. "
-    "It helps identify regions with higher or lower elderly populations.</div>",
-    unsafe_allow_html=True
-)
-
-
-
 ###############################################################################################
 # ---------- HISTOGRAM: % of Youth (15–24 years) by Region ----------
 st.markdown("<b style='font-size:22px;'>Youth (15–24 years) Distribution by Region</b>", unsafe_allow_html=True)
@@ -478,6 +454,7 @@ else:
         """,
         unsafe_allow_html=True
     )
+
 
 
 
