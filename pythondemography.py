@@ -208,25 +208,89 @@ st.markdown(
 
 
 st.divider()
-
-
-
-#add a box plot + points for the percentage of youth vs region with plotly express
+##############################################
+# ---------- INTERACTIVE BOX PLOT (Percentage of Youth 15–24) ----------
 
 Y15 = "Percentage of Youth - 15-24 years"
 
-fig = px.box(
-    df,
-    x="Region",
-    y=Y15,
-    points="all",                 # show all towns as points
-    hover_name="Town",            # big title on hover
-    hover_data={                  # extra fields on hover
-        "Region": True,
-        Y15: ':.1f',              # format number
-    }
+# 1) Controls
+all_regions = sorted(df["Region"].dropna().unique().tolist())
+sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
+
+# Optional: town filter (depends on region selection)
+available_towns = sorted(df[df["Region"].isin(sel_regions)]["Town"].dropna().unique().tolist())
+sel_towns = st.multiselect("Filter Towns (optional)", options=available_towns, default=[])
+
+# Y-range slider
+min_y, max_y = float(df[Y15].min()), float(df[Y15].max())
+y_range = st.slider(
+    "Show values between",
+    min_value=float(min_y), max_value=float(max_y),
+    value=(float(min_y), float(max_y)),
+    step=1.0
 )
-st.plotly_chart(fig, use_container_width=True)
+
+# Points & stats
+points_mode = st.radio(
+    "Points",
+    ["All", "Outliers only", "None"],
+    index=0,
+    horizontal=True
+)
+boxmean_on = st.checkbox("Show mean in box", value=True)
+
+points_kw = {"All": "all", "Outliers only": "outliers", "None": False}[points_mode]
+
+# 2) Filter data
+f = df[df["Region"].isin(sel_regions)].copy()
+if sel_towns:
+    f = f[f["Town"].isin(sel_towns)]
+f = f[(f[Y15] >= y_range[0]) & (f[Y15] <= y_range[1])]
+
+# 3) Build figure
+if f.empty:
+    st.info("No data for this selection.")
+else:
+    fig = px.box(
+        f,
+        x="Region",
+        y=Y15,
+        points=points_kw,
+        hover_name="Town",
+        hover_data={"Region": True, Y15: ':.1f'},
+    )
+    # mean marker
+    fig.update_traces(boxmean=boxmean_on)
+
+    # nicer hover + margins
+    fig.update_traces(hovertemplate="<b>%{hovertext}</b><br>%{x}<br>"+Y15+": %{y:.1f}%<extra></extra>")
+    fig.update_layout(
+        margin=dict(t=10, r=10, b=10, l=10),
+        yaxis_title="Percentage of Youth (15–24 years)",
+        xaxis_title="Region"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+
+##OLD CODE  OF BOX 
+# #add a box plot + points for the percentage of youth vs region with plotly express
+
+# Y15 = "Percentage of Youth - 15-24 years"
+
+# fig = px.box(
+#     df,
+#     x="Region",
+#     y=Y15,
+#     points="all",                 # show all towns as points
+#     hover_name="Town",            # big title on hover
+#     hover_data={                  # extra fields on hover
+#         "Region": True,
+#         Y15: ':.1f',              # format number
+#     }
+# )
+# st.plotly_chart(fig, use_container_width=True)
 
 # st.markdown(
 #     "<div class='note'>The box plot illustrates the distribution of the percentage "
@@ -272,6 +336,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
