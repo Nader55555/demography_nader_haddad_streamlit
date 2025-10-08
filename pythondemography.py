@@ -11,6 +11,7 @@ def thick_divider():
         unsafe_allow_html=True
     )
 
+st.markdown("""
 <style>
 div[data-baseweb="radio"] > div {
     display: flex;
@@ -367,6 +368,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
