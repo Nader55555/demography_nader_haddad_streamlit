@@ -431,7 +431,7 @@ else:
         y=Y15,
         color="Region",
         histfunc="avg",           # Average % of youth per region
-        title="Average Percentage of Youth (15–24 years) by Region",
+       
         labels={Y15: "Percentage of Youth (15–24 years)", "Region": "Region"}
     )
 
@@ -456,6 +456,7 @@ else:
         """,
         unsafe_allow_html=True
     )
+
 
 
 
