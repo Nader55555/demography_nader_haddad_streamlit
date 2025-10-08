@@ -428,6 +428,62 @@ st.markdown(
 
 
 
+###############################################################################################
+# ---------- HISTOGRAM (Youth 15–24) ----------
+st.markdown("<b style='font-size:22px;'>Distribution of Youth (15–24 years)</b>", unsafe_allow_html=True)
+
+# Controls (reuse sel_regions if you already defined it; otherwise uncomment next 2 lines)
+# all_regions = sorted(df["Region"].dropna().unique().tolist())
+# sel_regions = st.multiselect("Regions", options=all_regions, default=all_regions)
+
+# Filter by regions (+ optional towns if you already have sel_towns)
+hf = df[df["Region"].isin(sel_regions)].copy()
+if "sel_towns" in locals() and sel_towns:
+    hf = hf[hf["Town"].isin(sel_towns)]
+
+# Range slider for values (in %)
+ymin, ymax = float(hf[Y15].min()) if not hf.empty else 0.0, float(hf[Y15].max()) if not hf.empty else 100.0
+val_range = st.slider(
+    "Show values between (%)",
+    min_value=float(ymin), max_value=float(ymax),
+    value=(float(ymin), float(ymax)),
+    step=1.0
+)
+hf = hf[(hf[Y15] >= val_range[0]) & (hf[Y15] <= val_range[1])]
+
+# Bin slider
+nbins = st.slider("Number of bins", min_value=5, max_value=60, value=25, step=1)
+
+if hf.empty:
+    st.info("No data for this selection.")
+else:
+    fig = px.histogram(
+        hf,
+        x=Y15,
+        nbins=nbins,
+        opacity=0.9
+    )
+    # Mean line
+    mean_val = float(hf[Y15].mean())
+    fig.add_vline(x=mean_val, line_dash="dash", line_width=2)
+
+    # Tidy layout
+    fig.update_layout(
+        margin=dict(t=10, r=10, b=10, l=10),
+        xaxis_title="Percentage of Youth (15–24 years)",
+        yaxis_title="Count of towns"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown(
+        f"<div class='note'>Histogram of youth share across your selection. "
+        f"The dashed line marks the mean: <b>{mean_val:.1f}%</b>. "
+        f"Use the sliders to change the value range and bin count.</div>",
+        unsafe_allow_html=True
+    )
+
+
+
 
 
 
