@@ -114,46 +114,39 @@ df["Dominant size"] = df[[F13, F46, F7p]].idxmax(axis=1).map(
     {F13:"1–3", F46:"4–6", F7p:"7+"}
 )
 ##############################################
-# --- INTERACTIVE SUNBURST (Region, Dominant size) ---
+# --- Family-size composition / Region sunburst (interactive) ---
 
-# Controls
-all_regions = sorted(df["Region"].dropna().unique().tolist())
-sel_regions = st.multiselect("Filter regions", all_regions, default=all_regions)
-
+# 1) radio to choose which family-size band to show
 size_choice = st.radio(
     "Family size view",
-    ["All", "1-3", "4-6", "7+"],  # match your data's exact labels
+    ["All", "1-3", "4-6", "7+"],
     index=0,
     horizontal=True
 )
 
-# Filter
-f = df[df["Region"].isin(sel_regions)].copy()
-if size_choice != "All":
-    f = f[f["Dominant size"] == size_choice]
+# 2) filter df based on the choice (handles hyphen or en-dash in your data)
+if size_choice == "All":
+    df_plot = df.copy()
+else:
+    size_norm = df["Dominant size"].astype(str).str.replace("–", "-", regex=False).str.strip()
+    df_plot = df[size_norm == size_choice].copy()
 
-# Aggregate to counts for the wedges
-agg = (
-    f.groupby(["Region", "Dominant size"])
-     .size()
-     .reset_index(name="n")
-)
+# 3) build the sunburst exactly like your original
+color_map = {"1-3": "lightblue", "1–3": "lightblue",
+             "4-6": "orange",   "4–6": "orange",
+             "7+": "red"}
 
-if agg.empty:
+if df_plot.empty:
     st.info("No data for this selection.")
 else:
     fig = px.sunburst(
-        agg,
+        df_plot,
         path=["Region", "Dominant size"],
-        values="n",
-        color="Dominant size",
         title="Family Size Composition by Region",
-        color_discrete_map={"1-3": "lightblue", "4-6": "orange", "7+": "red"},
-        labels={"Dominant size": "Dominant Family Size", "n": "Records"},
-        category_orders={"Dominant size": ["1-3", "4-6", "7+"]}
+        color="Dominant size",
+        color_discrete_map=color_map,
+        labels={"Dominant size": "Dominant Family Size"}
     )
-    fig.update_traces(hovertemplate="<b>%{label}</b><br>Records: %{value:,}<extra></extra>")
-    fig.update_layout(margin=dict(t=10, r=10, b=10, l=10))
     st.plotly_chart(fig, use_container_width=True)
 
 ##OLD PIE CHARM
@@ -252,6 +245,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
