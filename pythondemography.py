@@ -114,6 +114,25 @@ df["Dominant size"] = df[[F13, F46, F7p]].idxmax(axis=1).map(
     {F13:"1–3", F46:"4–6", F7p:"7+"}
 )
 ##############################################
+
+# --- Interactive Family-size Composition / Region Sunburst ---
+
+# --- Styling for labels
+st.markdown("""
+<style>
+.label-box {
+    background-color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    display: inline-block;
+    font-size: 1.2rem;   /* makes text bigger */
+    font-weight: 600;    /* semi-bold for readability */
+    color: black;
+    margin-bottom: 6px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Region filter
 st.markdown("<div class='label-box'>Select Regions</div>", unsafe_allow_html=True)
 all_regions = sorted(df["Region"].dropna().unique().tolist())
@@ -253,6 +272,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
