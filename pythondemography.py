@@ -148,24 +148,15 @@ selected_regions = st.multiselect(
     default=all_regions
 )
 #####################################
-st.markdown("""
-<div style="
-    background-color:white;
-    padding:10px 15px;
-    border-radius:10px;
-    display:inline-block;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-">
-""", unsafe_allow_html=True)
-
+# Family size radio
+st.markdown("<div class='label-box'>Family Size View</div>", unsafe_allow_html=True)
 size_choice = st.radio(
+    "",
     "Family Size View",
     ["All", "1-3", "4-6", "7+"],
     index=0,
     horizontal=True
 )
-
-st.markdown("</div>", unsafe_allow_html=True)
 ###########################################
 # --- Filtered data ---
 filtered_df = df[df["Region"].isin(selected_regions)].copy()
@@ -352,6 +343,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
