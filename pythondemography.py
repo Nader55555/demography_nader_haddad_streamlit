@@ -449,11 +449,14 @@ else:
         <div class='note'>
         The histogram displays the <b>average percentage of youth (15–24 years)</b> per region.
         Use the slider above to adjust the visible range of percentages. <br><br>
-        <b>Insight:</b> Taller bars represent regions with a higher proportion of young people.
+          Insights:<br>
+        • Tripoli District stands out with the highest youth percentage, exceeding 100% in the chart, indicating data concentration or an outlier reflecting a very young population composition. <br>
+        • Most other regions, like Mount Lebanon, Akkar, and Beqaa Governorates, maintain a balanced youth share between 25% and 35%, showing a relatively stable distribution of young people across Lebanon’s regions.
         </div>
         """,
         unsafe_allow_html=True
     )
+
 
 
 
