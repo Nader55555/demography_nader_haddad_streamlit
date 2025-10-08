@@ -5,8 +5,8 @@ import plotly.express as px
 from pathlib import Path
 import base64
 
-def thick_divider(color="#0000", thickness=3):
-    st.markdown(f"<hr style='border:{thickness}px solid {color}; margin:{margin};'>", unsafe_allow_html=True)
+def thick_divider():
+    st.markdown("<hr style='border:3px solid black; margin:0;'>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -339,6 +339,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
