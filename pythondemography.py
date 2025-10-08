@@ -5,6 +5,65 @@ import plotly.express as px
 from pathlib import Path
 import base64
 
+### adding css 
+st.markdown("""
+<style>
+/* ===== Make filter widgets bigger & clearer ===== */
+
+/* Card behind the whole filter block (optional) */
+.filter-card {
+  background: rgba(255,255,255,0.95);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  margin: 8px 0 14px 0;
+}
+
+/* Labels above widgets */
+.stMultiSelect > label, .stSelectbox > label, .stSlider > label,
+.stRadio > label, .stCheckbox > label { 
+  font-size: 1.05rem; 
+  font-weight: 700;
+}
+
+/* Multiselect input & tags */
+.stMultiSelect div[data-baseweb="select"] { font-size: 1.05rem; }
+.stMultiSelect div[data-baseweb="tag"] {
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* Radio as pill buttons */
+.stRadio [role="radiogroup"] { gap: 12px; }
+.stRadio label {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.stRadio input:checked + div {
+  background: #f3f3f3 !important;
+  border: 1px solid #111 !important;
+}
+
+/* Slider: thicker track + larger knob */
+.stSlider div[data-baseweb="slider"] > div { height: 10px; }               /* track height */
+.stSlider div[data-baseweb="slider"] div[role="slider"] {                   /* knob */
+  width: 18px; height: 18px; border: 2px solid #d33; background: #fff;
+}
+
+/* Checkbox text a bit larger */
+.stCheckbox p { font-size: 1.05rem; font-weight: 600; }
+</style>
+""", unsafe_allow_html=True)
+
+
+###
+
+
 def thick_divider():
     st.markdown(
         "<hr style='border:3px solid black; margin:0 -1rem;'>",
@@ -216,6 +275,7 @@ st.markdown(
 
 
 thick_divider()
+st.markdown("<div class='filter-card'>", unsafe_allow_html=True)
 ##############################################
 # ---------- INTERACTIVE BOX PLOT (Percentage of Youth 15–24) ----------
 
@@ -223,6 +283,8 @@ Y15 = "Percentage of Youth - 15-24 years"
 
 # 1) Controls
 all_regions = sorted(df["Region"].dropna().unique().tolist())
+
+# sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
 sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
 
 # Optional: town filter (depends on region selection)
@@ -344,6 +406,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
