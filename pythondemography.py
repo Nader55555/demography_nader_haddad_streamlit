@@ -234,6 +234,8 @@ size_choice = st.radio(
     horizontal=True
 )
 
+st.write("Selected:", size_choice)
+
 # --- Filtered data ---
 filtered_df = df[df["Region"].isin(selected_regions)].copy()
 if size_choice != "All":
@@ -423,6 +425,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
