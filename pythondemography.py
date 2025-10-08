@@ -209,33 +209,28 @@ st.markdown(
 
 st.divider()
 ##############################################
-# ---------- White background for filter area ----------
-st.markdown("""
-<div style="
-    background-color: white;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    margin-bottom: 15px;">
-""", unsafe_allow_html=True)
+# ---------- INTERACTIVE BOX PLOT (Percentage of Youth 15–24) ----------
 
-# --- your existing filters start here ---
+Y15 = "Percentage of Youth - 15-24 years"
 
+# 1) Controls
 all_regions = sorted(df["Region"].dropna().unique().tolist())
 sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
 
+# Optional: town filter (depends on region selection)
 available_towns = sorted(df[df["Region"].isin(sel_regions)]["Town"].dropna().unique().tolist())
 sel_towns = st.multiselect("Filter Towns (optional)", options=available_towns, default=[])
 
+# Y-range slider
 min_y, max_y = float(df[Y15].min()), float(df[Y15].max())
 y_range = st.slider(
     "Show values between",
-    min_value=float(min_y),
-    max_value=float(max_y),
+    min_value=float(min_y), max_value=float(max_y),
     value=(float(min_y), float(max_y)),
     step=1.0
 )
 
+# Points & stats
 points_mode = st.radio(
     "Points",
     ["All", "Outliers only", "None"],
@@ -244,9 +239,38 @@ points_mode = st.radio(
 )
 boxmean_on = st.checkbox("Show mean in box", value=True)
 
-# --- close the white background container ---
-st.markdown("</div>", unsafe_allow_html=True)
+points_kw = {"All": "all", "Outliers only": "outliers", "None": False}[points_mode]
 
+# 2) Filter data
+f = df[df["Region"].isin(sel_regions)].copy()
+if sel_towns:
+    f = f[f["Town"].isin(sel_towns)]
+f = f[(f[Y15] >= y_range[0]) & (f[Y15] <= y_range[1])]
+
+# 3) Build figure
+if f.empty:
+    st.info("No data for this selection.")
+else:
+    fig = px.box(
+        f,
+        x="Region",
+        y=Y15,
+        points=points_kw,
+        hover_name="Town",
+        hover_data={"Region": True, Y15: ':.1f'},
+    )
+    # mean marker
+    fig.update_traces(boxmean=boxmean_on)
+
+    # nicer hover + margins
+    fig.update_traces(hovertemplate="<b>%{hovertext}</b><br>%{x}<br>"+Y15+": %{y:.1f}%<extra></extra>")
+    fig.update_layout(
+        margin=dict(t=10, r=10, b=10, l=10),
+        yaxis_title="Percentage of Youth (15–24 years)",
+        xaxis_title="Region"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -312,6 +336,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
