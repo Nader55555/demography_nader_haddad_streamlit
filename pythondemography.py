@@ -10,7 +10,7 @@ st.markdown("""
 <style>
 /* Make the radio label ("Family Size View") bigger and bold */
 div[data-testid="stRadio"] > label {
-    font-size: 20px !important;
+    font-size: 50px !important;
     font-weight: 700 !important;
 }
 
@@ -425,6 +425,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
