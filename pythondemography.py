@@ -39,14 +39,14 @@ st.markdown("""
 /* Labels above widgets */
 .stMultiSelect > label, .stSelectbox > label, .stSlider > label,
 .stRadio > label, .stCheckbox > label { 
-  font-size: 1.05rem; 
+  font-size: 100rem; 
   font-weight: 700;
 }
 
 /* Multiselect input & tags */
 .stMultiSelect div[data-baseweb="select"] { font-size: 1.05rem; }
 .stMultiSelect div[data-baseweb="tag"] {
-  font-size: 0.95rem;
+  font-size: 100rem;
   padding: 6px 10px;
   border-radius: 8px;
 }
@@ -303,6 +303,7 @@ Y15 = "Percentage of Youth - 15-24 years"
 # 1) Controls
 all_regions = sorted(df["Region"].dropna().unique().tolist())
 
+
 # sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
 sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
 
@@ -425,6 +426,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
