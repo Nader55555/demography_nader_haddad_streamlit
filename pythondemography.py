@@ -294,7 +294,7 @@ st.markdown(
 
 
 thick_divider()
-st.markdown("<div class='filter-card'>", unsafe_allow_html=True)
+st.markdown("<b style='font-size:22px;'>Filter Regions</b>", unsafe_allow_html=True)
 ##############################################
 # ---------- INTERACTIVE BOX PLOT (Percentage of Youth 15–24) ----------
 
@@ -303,7 +303,7 @@ Y15 = "Percentage of Youth - 15-24 years"
 # 1) Controls
 all_regions = sorted(df["Region"].dropna().unique().tolist())
 # st.markdown("<b style='font-size:22px;'>Filter Regions</b>", unsafe_allow_html=True)
-sel_regions = st.multiselect("asd", options=all_regions, default=all_regions)
+sel_regions = st.multiselect("region select", options=all_regions, default=all_regions)
 # sel_regions = st.multiselect("", options=all_regions, default=all_regions)
 
 # Optional: town filter (depends on region selection)
@@ -425,6 +425,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
