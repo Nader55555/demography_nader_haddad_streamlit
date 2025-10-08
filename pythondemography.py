@@ -210,7 +210,7 @@ st.markdown(
 
 
 
-thick_divider("#ff4b4b", 4)
+thick_divider()
 ##############################################
 # ---------- INTERACTIVE BOX PLOT (Percentage of Youth 15–24) ----------
 
@@ -316,7 +316,7 @@ st.markdown(
 )
 
 
-thick_divider("#ff4b4b", 4)
+thick_divider()
 
 #add a box plot + points for the percentage of elderly vs region with plotly express
 E65 = "Percentage of Eldelry - 65 or more years"
@@ -339,6 +339,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
