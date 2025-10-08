@@ -116,6 +116,14 @@ df["Dominant size"] = df[[F13, F46, F7p]].idxmax(axis=1).map(
 ##############################################
 # --- Interactive Family-size Composition / Region Sunburst ---
 
+# Add white background around the filters
+st.markdown(
+    """
+    <div style="background-color: white; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+    """,
+    unsafe_allow_html=True
+)
+
 # Region filter
 all_regions = sorted(df["Region"].dropna().unique().tolist())
 selected_regions = st.multiselect(
@@ -132,23 +140,20 @@ size_choice = st.radio(
     horizontal=True
 )
 
+st.markdown("</div>", unsafe_allow_html=True)  # close the white box
+
 # Filter data
 filtered_df = df[df["Region"].isin(selected_regions)].copy()
 
 if size_choice != "All":
-    # Handle both hyphen and en-dash just in case
     filtered_df = filtered_df[
         filtered_df["Dominant size"].astype(str).str.replace("–", "-", regex=False).str.strip() == size_choice
     ]
 
 # Color map for consistency
-color_map = {
-    "1-3": "lightblue",
-    "1–3": "lightblue",
-    "4-6": "orange",
-    "4–6": "orange",
-    "7+": "red"
-}
+color_map = {"1-3": "lightblue", "1–3": "lightblue",
+             "4-6": "orange", "4–6": "orange",
+             "7+": "red"}
 
 # Create sunburst
 if filtered_df.empty:
@@ -261,6 +266,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
