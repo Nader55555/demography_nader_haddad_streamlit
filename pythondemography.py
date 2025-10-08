@@ -114,39 +114,55 @@ df["Dominant size"] = df[[F13, F46, F7p]].idxmax(axis=1).map(
     {F13:"1–3", F46:"4–6", F7p:"7+"}
 )
 ##############################################
-# --- Family-size composition / Region sunburst (interactive) ---
+# --- Interactive Family-size Composition / Region Sunburst ---
 
-# 1) radio to choose which family-size band to show
+# Region filter
+all_regions = sorted(df["Region"].dropna().unique().tolist())
+selected_regions = st.multiselect(
+    "Select Regions",
+    options=all_regions,
+    default=all_regions
+)
+
+# Family size radio
 size_choice = st.radio(
-    "Family size view",
+    "Family Size View",
     ["All", "1-3", "4-6", "7+"],
     index=0,
     horizontal=True
 )
 
-# 2) filter df based on the choice (handles hyphen or en-dash in your data)
-if size_choice == "All":
-    df_plot = df.copy()
-else:
-    size_norm = df["Dominant size"].astype(str).str.replace("–", "-", regex=False).str.strip()
-    df_plot = df[size_norm == size_choice].copy()
+# Filter data
+filtered_df = df[df["Region"].isin(selected_regions)].copy()
 
-# 3) build the sunburst exactly like your original
-color_map = {"1-3": "lightblue", "1–3": "lightblue",
-             "4-6": "orange",   "4–6": "orange",
-             "7+": "red"}
+if size_choice != "All":
+    # Handle both hyphen and en-dash just in case
+    filtered_df = filtered_df[
+        filtered_df["Dominant size"].astype(str).str.replace("–", "-", regex=False).str.strip() == size_choice
+    ]
 
-if df_plot.empty:
-    st.info("No data for this selection.")
+# Color map for consistency
+color_map = {
+    "1-3": "lightblue",
+    "1–3": "lightblue",
+    "4-6": "orange",
+    "4–6": "orange",
+    "7+": "red"
+}
+
+# Create sunburst
+if filtered_df.empty:
+    st.info("No data available for this selection.")
 else:
     fig = px.sunburst(
-        df_plot,
+        filtered_df,
         path=["Region", "Dominant size"],
         title="Family Size Composition by Region",
         color="Dominant size",
         color_discrete_map=color_map,
         labels={"Dominant size": "Dominant Family Size"}
     )
+
     st.plotly_chart(fig, use_container_width=True)
 
 ##OLD PIE CHARM
@@ -245,6 +261,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
