@@ -8,6 +8,23 @@ import base64
 ### adding css 
 st.markdown("""
 <style>
+/* Make the radio label ("Family Size View") bigger and bold */
+div[data-testid="stRadio"] > label {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
+
+/* Make the radio options ("All", "1-3", etc.) bigger */
+div[data-testid="stRadio"] div[role="radiogroup"] > label > div[data-testid="stMarkdownContainer"] p {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+st.markdown("""
+<style>
 /* ===== Make filter widgets bigger & clearer ===== */
 
 /* Card behind the whole filter block (optional) */
@@ -211,7 +228,7 @@ selected_regions = st.multiselect(
 # Family size radio
  
 size_choice = st.radio(
-    "**Family Size View**",
+    "Family Size View",
     ["All", "1-3", "4-6", "7+"],
     index=0,
     horizontal=True
@@ -406,6 +423,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
