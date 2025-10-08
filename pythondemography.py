@@ -302,8 +302,8 @@ Y15 = "Percentage of Youth - 15-24 years"
 
 # 1) Controls
 all_regions = sorted(df["Region"].dropna().unique().tolist())
-
-sel_regions = st.multiselect("Filter Regions", options=all_regions, default=all_regions)
+st.markdown("<b style='font-size:22px;'>Filter Regions</b>", unsafe_allow_html=True)
+sel_regions = st.multiselect("", options=all_regions, default=all_regions)
 # sel_regions = st.multiselect("", options=all_regions, default=all_regions)
 
 # Optional: town filter (depends on region selection)
@@ -425,6 +425,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
