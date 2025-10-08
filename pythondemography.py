@@ -11,31 +11,6 @@ def thick_divider():
         unsafe_allow_html=True
     )
 
-st.markdown("""
-<style>
-div[data-baseweb="radio"] > div {
-    display: flex;
-    gap: 10px; /* space between items */
-}
-div[data-baseweb="radio"] label {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-weight: 600;
-    color: black;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-div[data-baseweb="radio"] label:hover {
-    background-color: #f5f5f5;
-}
-div[data-baseweb="radio"] input:checked + div {
-    background-color: #f0f0f0 !important;
-    border: 1px solid black !important;
-}
-</style>
-""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -368,6 +343,7 @@ st.markdown(
     "It helps identify regions with higher or lower elderly populations.</div>",
     unsafe_allow_html=True
 )
+
 
 
 
