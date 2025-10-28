@@ -458,7 +458,7 @@ else:
     )
 
 
-thick_divider()
+
 
 # --- Controls (keep only ONE interactive feature) ---
 st.markdown("<div class='label-box'>Select Regions</div>", unsafe_allow_html=True)
@@ -555,6 +555,7 @@ else:
         f"Notes: bars show percent share per region. Segments under {PCT_THRESHOLD:.0f}% are hidden to reduce clutter, "
         "so some bars may not visually sum to a perfect 100%. Hover to see exact percentages."
     )
+
 
 
 
