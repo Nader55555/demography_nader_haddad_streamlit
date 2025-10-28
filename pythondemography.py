@@ -458,6 +458,103 @@ else:
     )
 
 
+thick_divider()
+
+# --- Controls (keep only ONE interactive feature) ---
+st.markdown("<div class='label-box'>Select Regions</div>", unsafe_allow_html=True)
+all_regions = sorted(df["Region"].dropna().unique().tolist())
+selected_regions = st.multiselect(
+    "",  # we styled our own label above
+    options=all_regions,
+    default=all_regions
+)
+
+# --- Prep data ---
+# 1) keep selected regions
+filtered_df = df[df["Region"].isin(selected_regions)].copy()
+
+# 2) normalize the family-size labels (replace en-dash with hyphen, trim, unify)
+size_clean = (
+    filtered_df["Dominant size"]
+        .astype(str)
+        .str.replace("–", "-", regex=False)
+        .str.strip()
+        .replace({"1–3":"1-3", "4–6":"4-6"})
+)
+filtered_df["size_bucket"] = size_clean.where(size_clean.isin(["1-3", "4-6", "7+"]), "Other")
+
+# (Optional) if you truly have only these three buckets, drop "Other"
+filtered_df = filtered_df[filtered_df["size_bucket"].isin(["1-3", "4-6", "7+"])]
+
+# 3) aggregate and compute percentage per region
+grp = (
+    filtered_df.groupby(["Region", "size_bucket"])
+               .size()
+               .reset_index(name="count")
+)
+grp["total"] = grp.groupby("Region")["count"].transform("sum")
+grp["pct"] = 100 * grp["count"] / grp["total"]
+
+# --- Declutter rules ---
+PCT_THRESHOLD = 1.0  # hide segments under 1% (adjust if needed)
+grp_vis = grp[grp["pct"] >= PCT_THRESHOLD].copy()
+
+# sort regions by share of 4-6 descending (helps the main pattern pop)
+order_46 = (
+    grp.loc[grp["size_bucket"] == "4-6", ["Region", "pct"]]
+       .sort_values("pct", ascending=False)["Region"]
+       .tolist()
+)
+# ensure all regions appear, even those with no 4-6
+ordered_regions = order_46 + [r for r in filtered_df["Region"].unique() if r not in order_46]
+
+# --- Color palette: one hue, increasing darkness with family size ---
+color_map = {
+    "1-3": "#dbeafe",  # light
+    "4-6": "#60a5fa",  # mid
+    "7+":  "#1d4ed8",  # dark
+}
+
+# --- Build 100% stacked bar (use pct as y) ---
+import plotly.express as px
+
+if grp_vis.empty:
+    st.info("No data available for this selection.")
+else:
+    fig = px.bar(
+        grp_vis,
+        x="Region",
+        y="pct",
+        color="size_bucket",
+        category_orders={"Region": ordered_regions, "size_bucket": ["1-3", "4-6", "7+"]},
+        color_discrete_map=color_map,
+        barmode="stack",
+        labels={"pct": "Share (%)", "size_bucket": "Family size"},
+        title="Family Size Composition by Region (100% Stacked)"
+    )
+
+    # tidy up: no inside labels; use hover; keep y to 0–100
+    fig.update_layout(
+        legend_title_text="Family size",
+        xaxis_title="Region",
+        yaxis_title="Share (%)",
+        hovermode="x unified",
+        margin=dict(l=10, r=10, t=60, b=10),
+        bargap=0.2
+    )
+    fig.update_yaxes(range=[0, 100], ticksuffix="%")
+
+    # cleaner hover text
+    fig.update_traces(
+        hovertemplate="<b>%{x}</b><br>%{legendgroup}: %{y:.1f}%<extra></extra>"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.caption(
+        f"Notes: bars show percent share per region. Segments under {PCT_THRESHOLD:.0f}% are hidden to reduce clutter, "
+        "so some bars may not visually sum to a perfect 100%. Hover to see exact percentages."
+    )
 
 
 
