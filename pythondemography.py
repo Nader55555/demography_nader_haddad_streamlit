@@ -496,8 +496,14 @@ PCT_THRESHOLD = 1.0
 grp_vis = grp.copy()
 grp_vis["pct"] = grp_vis["pct"].where(grp_vis["pct"] >= PCT_THRESHOLD, 0.0)  # zero out instead of drop
 
-# keep all regions (sorted alphabetically or as in dataset)
-ordered_regions = sorted(filtered_df["Region"].unique().tolist())
+# sort regions by share of 4-6 descending (helps the main pattern pop)
+order_46 = (
+    grp.loc[grp["size_bucket"] == "4-6", ["Region", "pct"]]
+       .sort_values("pct", ascending=False)["Region"]
+       .tolist()
+)
+# ensure all regions appear, even those with no 4-6
+ordered_regions = order_46 + [r for r in filtered_df["Region"].unique() if r not in order_46]
 
 color_map = {"1-3": "#dbeafe", "4-6": "#60a5fa", "7+": "#1d4ed8"}
 
@@ -534,6 +540,7 @@ else:
         f"Segments under {PCT_THRESHOLD:.0f}% are visually suppressed (set to 0) to reduce clutter. "
         "Hover for exact values."
     )
+
 
 
 
