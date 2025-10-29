@@ -505,7 +505,7 @@ order_46 = (
 # ensure all regions appear, even those with no 4-6
 ordered_regions = order_46 + [r for r in filtered_df["Region"].unique() if r not in order_46]
 
-color_map = {"1-3": "#dbeafe", "4-6": "#60a5fa", "7+": "#1d4ed8"}
+color_map = {"1-3": "#dbeafe", "4-6": "#60a5fa", "7+": "#ef4444"}  # red for 7+
 
 import plotly.express as px
 
@@ -540,6 +540,7 @@ else:
         f"Segments under {PCT_THRESHOLD:.0f}% are visually suppressed (set to 0) to reduce clutter. "
         "Hover for exact values."
     )
+
 
 
 
